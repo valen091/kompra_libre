@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registro e Inicio de Sesión</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <header class="bg-primary text-white p-3">
+    <div class="container d-flex justify-content-between align-items-center">
+      <h1 class="h3 m-0">Kompra Libre</h1>
+      <nav>
+        <a href="tienda.html" class="text-white me-3">Tienda</a>
+        <a href="usuario.html" class="text-white me-3">Usuario</a>
+        <a href="admin.html" class="text-white">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container my-5">
+    <h1 class="mb-4">👤 Usuario - Registro e Inicio de Sesión</h1>
+
+    <div class="card mb-4">
+      <div class="card-header bg-success text-white">Registro</div>
+      <div class="card-body">
+        <form id="registroForm">
+          <input type="text" id="regNombre" class="form-control mb-2" placeholder="Nombre completo" required>
+          <input type="email" id="regEmail" class="form-control mb-2" placeholder="Correo electrónico" required>
+          <input type="password" id="regPassword" class="form-control mb-2" placeholder="Contraseña" required>
+          <button class="btn btn-success">Registrarse</button>
+          <div id="registroMsg" class="mt-2 text-success"></div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">Inicio de Sesión</div>
+      <div class="card-body">
+        <form id="loginForm">
+          <input type="email" id="loginEmail" class="form-control mb-2" placeholder="Correo electrónico" required>
+          <input type="password" id="loginPassword" class="form-control mb-2" placeholder="Contraseña" required>
+          <button class="btn btn-primary">Iniciar sesión</button>
+          <div id="loginMsg" class="mt-2 text-danger"></div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card d-none" id="historialCard">
+      <div class="card-header bg-dark text-white">Historial de Compras</div>
+      <div class="card-body">
+        <p><strong>Bienvenido, <span id="nombreUsuario"></span></strong></p>
+        <ul class="list-group" id="historialLista"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const registroForm = document.getElementById('registroForm');
+    const loginForm = document.getElementById('loginForm');
+    const registroMsg = document.getElementById('registroMsg');
+    const loginMsg = document.getElementById('loginMsg');
+    const historialCard = document.getElementById('historialCard');
+    const historialLista = document.getElementById('historialLista');
+    const nombreUsuario = document.getElementById('nombreUsuario');
+
+    let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+    registroForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const nombre = document.getElementById('regNombre').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value;
+
+      const yaExiste = usuarios.some(u => u.email === email);
+      if (yaExiste) {
+        registroMsg.textContent = "Ese correo ya está registrado.";
+        registroMsg.classList.replace("text-success", "text-danger");
+        return;
+      }
+
+      const nuevoUsuario = {
+        nombre,
+        email,
+        password,
+        compras: []
+      };
+
+      usuarios.push(nuevoUsuario);
+      localStorage.setItem('usuarios', JSON.stringify(usuarios));
+      registroMsg.textContent = "Usuario registrado con éxito.";
+      registroMsg.classList.replace("text-danger", "text-success");
+      registroForm.reset();
+    });
+
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      const usuario = usuarios.find(u => u.email === email && u.password === password);
+
+      if (!usuario) {
+        loginMsg.textContent = "Correo o contraseña incorrectos.";
+        return;
+      }
+
+      loginMsg.textContent = "";
+      historialCard.classList.remove("d-none");
+      nombreUsuario.textContent = usuario.nombre;
+
+      localStorage.setItem('usuarioActivo', JSON.stringify(usuario));
+
+      const compraPendiente = JSON.parse(localStorage.getItem('compraFinalizada'));
+      if (compraPendiente && compraPendiente.length > 0) {
+        usuario.compras = usuario.compras.concat(compraPendiente);
+        localStorage.removeItem('compraFinalizada');
+        localStorage.setItem('usuarios', JSON.stringify(usuarios));
+      }
+
+      mostrarHistorial(usuario.compras);
+    });
+
+    function mostrarHistorial(compras) {
+      historialLista.innerHTML = "";
+
+      if (compras.length === 0) {
+        historialLista.innerHTML = "<li class='list-group-item'>Aún no hay compras registradas.</li>";
+        return;
+      }
+
+      compras.forEach(compra => {
+        const li = document.createElement("li");
+        li.className = "list-group-item";
+        li.textContent = `${compra.producto} - $${compra.precio}`;
+        historialLista.appendChild(li);
+      });
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
