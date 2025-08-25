@@ -5,6 +5,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Registro e Inicio de Sesión</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --color-principal: #FFDD00;
+      --color-rosa-fluor: #FF33CC;
+      --color-celeste-fluor: #00FFFF;
+      --color-negro-claro: #333333;
+      --color-gris-oscuro: #555555;
+      --color-gris-claro: #CCCCCC;
+      --color-fondo: #FAFAFA;
+    }
+
+    body {
+      background-color: var(--color-fondo);
+      color: var(--color-negro-claro);
+    }
+
+    header.bg-primary {
+      background-color: var(--color-principal) !important;
+      color: var(--color-negro-claro) !important;
+    }
+
+    header.bg-primary a.text-white {
+      color: var(--color-negro-claro) !important;
+      font-weight: 600;
+    }
+
+    header.bg-primary a.text-white:hover {
+      color: var(--color-rosa-fluor) !important;
+    }
+
+    .card-header.bg-success {
+      background-color: var(--color-rosa-fluor) !important;
+    }
+
+    .card-header.bg-primary {
+      background-color: var(--color-celeste-fluor) !important;
+    }
+
+    .btn-success {
+      background-color: var(--color-rosa-fluor) !important;
+      border-color: var(--color-rosa-fluor) !important;
+      color: #fff !important;
+    }
+
+    .btn-success:hover {
+      background-color: var(--color-principal) !important;
+      border-color: var(--color-principal) !important;
+      color: var(--color-negro-claro) !important;
+    }
+
+    .btn-primary {
+      background-color: var(--color-celeste-fluor) !important;
+      border-color: var(--color-celeste-fluor) !important;
+      color: var(--color-negro-claro) !important;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-principal) !important;
+      border-color: var(--color-principal) !important;
+      color: var(--color-negro-claro) !important;
+    }
+
+    #historialCard .card-header.bg-dark {
+      background-color: var(--color-negro-claro) !important;
+    }
+
+    input.form-control,
+    textarea.form-control {
+      border-color: var(--color-gris-claro);
+    }
+
+    input.form-control:focus,
+    textarea.form-control:focus {
+      border-color: var(--color-principal);
+      box-shadow: 0 0 5px var(--color-principal);
+    }
+  </style>
 </head>
 <body>
   <header class="bg-primary text-white p-3">

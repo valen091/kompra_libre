@@ -1,0 +1,68 @@
+:root {
+  --color-principal: #FFDD00;       
+  --color-rosa-fluor: #FF33CC;      
+  --color-celeste-fluor: #00FFFF;  
+  --color-negro-claro: #333333;     
+  --color-gris-oscuro: #555555;
+  --color-gris-claro: #CCCCCC;
+  --color-fondo: #FAFAFA;
+}
+
+body {
+  background-color: var(--color-fondo);
+  color: var(--color-negro-claro);
+  font-family: Arial, sans-serif;
+}
+
+header.bg-primary {
+  background-color: var(--color-principal) !important;
+  color: var(--color-negro-claro) !important;
+}
+
+.admin-card {
+  background-color: #ffffff;
+  border: 1px solid var(--color-gris-claro);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.btn-primary {
+  background-color: var(--color-rosa-fluor) !important;
+  border-color: var(--color-rosa-fluor) !important;
+  color: white !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-celeste-fluor) !important;
+  border-color: var(--color-celeste-fluor) !important;
+  color: white !important;
+}
+
+.btn-success {
+  background-color: #198754; 
+  border-color: #198754;
+}
+
+.btn-success:hover {
+  background-color: #157347;
+  border-color: #146c43;
+}
+
+.btn-warning {
+  background-color: #ffc107; 
+  border-color: #ffc107;
+  color: #212529;
+}
+
+.btn-danger {
+  background-color: #dc3545; 
+  border-color: #dc3545;
+  color: white;
+}
+
+.producto-item {
+  border: 1px solid var(--color-gris-claro);
+  background-color: #fdfdfd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
