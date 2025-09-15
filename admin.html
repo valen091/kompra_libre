@@ -5,77 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Panel de Administración - Kompra Libre</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-
+  
   <style>
-    body {
-      background-color: #ffffff;
-      color: #f0f0f0;
-    }
-
-    
-    header {
-      background-color: #FFD700;
-      color: #000;
-    }
-
-    header a {
-      color: #000;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    header a:hover {
-      color: #000000;
-      text-decoration: underline;
-    }
-
-   
-    .card {
-      background-color: #2c2c2c;
-      color: #fff;
-      border: none;
-    }
-
-    
-    .btn-primary {
-      background-color: #00ffff; 
-      border: none;
-      color: #000;
-      font-weight: bold;
-    }
-
-    .btn-primary:hover {
-      background-color: #00d4d4;
-    }
-
-    .btn-success {
-      background-color: #ff00ff; 
-      border: none;
-      color: #000;
-      font-weight: bold;
-    }
-
-    .btn-success:hover {
-      background-color: #e600e6;
-    }
-
-    .btn-warning {
-      background-color: #ffff00;
-      color: #000;
-      border: none;
-    }
-
-    .btn-danger {
-      background-color: #ff4444;
-      border: none;
-    }
-
-   
-    .list-group-item {
-      background-color: #000000;
-      border: none;
-      color: #fff;
-    }
+    body { background-color: #ffffff; }
+    header { background-color: #FFD700; color: #000; }
+    header a { color: #000; text-decoration: none; font-weight: bold; }
+    header a:hover { text-decoration: underline; }
+    .card { background-color: #2c2c2c; color: #fff; border: none; }
+    .btn-primary { background-color: #00ffff; border: none; color: #000; font-weight: bold; }
+    .btn-primary:hover { background-color: #00d4d4; }
+    .btn-success { background-color: #ff00ff; border: none; color: #000; font-weight: bold; }
+    .btn-success:hover { background-color: #e600e6; }
+    .btn-warning { background-color: #ffff00; color: #000; border: none; }
+    .btn-danger { background-color: #ff4444; border: none; }
+    .list-group-item { background-color: #000; border: none; color: #fff; }
+    .texto-claro { color: #ccc; }
   </style>
 </head>
 <body>
@@ -91,7 +35,7 @@
   </header>
 
   <main class="container">
-  
+
     <section id="loginSection" class="card mx-auto mb-4" style="max-width: 400px;">
       <div class="card-body">
         <h2 class="card-title mb-4">Login Admin</h2>
@@ -104,11 +48,10 @@
           </div>
           <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>
         </form>
-        <div id="loginMessage" class="mt-3 text-success"></div>
+        <div id="loginMessage" class="mt-3"></div>
       </div>
     </section>
 
-  
     <section id="adminPanel" class="d-none">
       <div class="card mx-auto" style="max-width: 600px;">
         <div class="card-body">
@@ -133,7 +76,7 @@
             </div>
             <button type="submit" class="btn btn-success w-100">Guardar</button>
           </form>
-          <div id="formMsg" class="mt-3 text-success"></div>
+          <div id="formMsg" class="mt-3"></div>
 
           <h3 class="mt-5">Lista de Productos</h3>
           <ul id="listaProductos" class="list-group mt-3"></ul>
@@ -142,13 +85,9 @@
     </section>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    const usuarios = [
-      { email: 'admin@admin.com', password: 'admin123' },
-    ];
-
+    const usuarios = [{ email: 'admin@admin.com', password: 'admin123' }];
     const loginForm = document.getElementById('loginForm');
     const loginMessage = document.getElementById('loginMessage');
     const loginSection = document.getElementById('loginSection');
@@ -157,28 +96,28 @@
     loginForm.addEventListener('submit', function (e) {
       e.preventDefault();
       loginMessage.textContent = '';
+
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value.trim();
 
-      const usuarioValido = usuarios.find(
-        (u) => u.email === email && u.password === password
-      );
+      const usuarioValido = usuarios.find(u => u.email === email && u.password === password);
 
       if (usuarioValido) {
-        loginMessage.classList.remove('text-danger');
-        loginMessage.classList.add('text-success');
-        loginMessage.textContent = 'Login exitoso.';
-        loginSection.classList.add('d-none');
-        adminPanel.classList.remove('d-none');
-        cargarProductos();
+        loginMessage.className = "text-success";
+        loginMessage.textContent = '✅ Login exitoso. Redirigiendo...';
+
+        setTimeout(() => {
+          loginSection.classList.add('d-none');
+          adminPanel.classList.remove('d-none');
+          cargarProductos();
+        }, 800);
       } else {
-        loginMessage.classList.remove('text-success');
-        loginMessage.classList.add('text-danger');
-        loginMessage.textContent = 'Credenciales incorrectas.';
+        loginMessage.className = "text-danger";
+        loginMessage.textContent = '❌ Credenciales incorrectas.';
       }
     });
 
-    let productos = [];
+
     let editIndex = null;
 
     const formProducto = document.getElementById('formProducto');
@@ -192,7 +131,34 @@
 
     function cargarProductos() {
       const productosGuardados = localStorage.getItem('productos');
-      productos = productosGuardados ? JSON.parse(productosGuardados) : [];
+      if (productosGuardados) {
+        productos = JSON.parse(productosGuardados);
+      } else {
+        productos = [
+          {
+            nombre: "Cortadora de Césped",
+            precio: 15000,
+            categoria: "herramientas",
+            detalles: "Corta el pasto fácilmente",
+            descripcion: "Ideal para jardines medianos"
+          },
+          {
+            nombre: "Taladro Eléctrico",
+            precio: 1500,
+            categoria: "herramientas",
+            detalles: "Incluye brocas",
+            descripcion: "Taladro eléctrico portátil"
+          },
+          {
+            nombre: "Destornillador",
+            precio: 800,
+            categoria: "herramientas",
+            detalles: "De punta magnética",
+            descripcion: "Herramienta básica de mano"
+          }
+        ];
+        guardarProductos();
+      }
       mostrarProductos();
     }
 
@@ -203,7 +169,7 @@
     formProducto.addEventListener('submit', function (e) {
       e.preventDefault();
       formMsg.textContent = '';
-      formMsg.classList.remove('text-danger', 'text-success');
+      formMsg.className = '';
 
       const nombre = nombreInput.value.trim();
       const precio = parseFloat(precioInput.value);
@@ -212,48 +178,67 @@
       const descripcion = descripcionInput.value.trim();
 
       if (!nombre || isNaN(precio) || precio <= 0 || !categoria || !detalles || !descripcion) {
-        formMsg.textContent = 'Todos los campos son obligatorios y deben ser válidos.';
-        formMsg.classList.add('text-danger');
+        formMsg.textContent = '⚠️ Todos los campos son obligatorios y deben ser válidos.';
+        formMsg.className = 'text-danger';
         return;
       }
 
       if (editIndex !== null) {
         productos[editIndex] = { nombre, precio, categoria, detalles, descripcion };
         editIndex = null;
-        formMsg.textContent = 'Producto editado correctamente.';
+        formMsg.textContent = '✏️ Producto editado correctamente.';
       } else {
         productos.push({ nombre, precio, categoria, detalles, descripcion });
-        formMsg.textContent = 'Producto agregado correctamente.';
+        formMsg.textContent = '✅ Producto agregado correctamente.';
       }
 
-      formMsg.classList.add('text-success');
+      formMsg.className = 'text-success';
       formProducto.reset();
       guardarProductos();
       mostrarProductos();
     });
 
     function mostrarProductos() {
-  listaProductos.innerHTML = '';
-  if (productos.length === 0) {
-    listaProductos.innerHTML = `<li class="list-group-item text-center text-muted">No hay productos cargados.</li>`;
-    return;
-  }
+      listaProductos.innerHTML = '';
+      if (productos.length === 0) {
+        listaProductos.innerHTML = `<li class="list-group-item text-center text-muted">No hay productos cargados.</li>`;
+        return;
+      }
 
-  productos.forEach((producto, index) => {
-    const li = document.createElement('li');
-    li.className = 'list-group-item d-flex justify-content-between align-items-start flex-column';
-    li.innerHTML = `
-      <div class="w-100">
-        <strong>${producto.nombre}</strong> - $${producto.precio.toFixed(2)}<br/>
-        <small class="text-muted">Categoría: ${producto.categoria}</small><br/>
-        <small><strong>Detalles:</strong> ${producto.detalles}</small><br/>
-        <small><strong>Descripción:</strong> ${producto.descripcion}</small>
-      </div>
-      <div class="mt-2 align-self-end">
-        <button class="btn btn-sm btn-warning me-2" onclick="editarProducto(${index})">Editar</button>
-        <button class="btn btn-sm btn-danger" onclick="eliminarProducto(${index})">Eliminar</button>
-      </div>
-    `;
-    listaProductos.appendChild(li);
-  });
-}
+      productos.forEach((producto, index) => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-start flex-column';
+        li.innerHTML = `
+          <div class="w-100">
+            <strong>${producto.nombre}</strong> - $${producto.precio.toFixed(2)}<br/>
+            <small class="texto-claro">Categoría: ${producto.categoria}</small><br/>
+            <small><strong>Detalles:</strong> ${producto.detalles || 'No disponible'}</small><br/>
+            <small><strong>Descripción:</strong> ${producto.descripcion || 'No disponible'}</small>
+          </div>
+          <div class="mt-2 align-self-end">
+            <button class="btn btn-sm btn-warning me-2" onclick="editarProducto(${index})">Editar</button>
+            <button class="btn btn-sm btn-danger" onclick="eliminarProducto(${index})">Eliminar</button>
+          </div>
+        `;
+        listaProductos.appendChild(li);
+      });
+    }
+
+    window.editarProducto = function (index) {
+      const p = productos[index];
+      nombreInput.value = p.nombre;
+      precioInput.value = p.precio;
+      categoriaInput.value = p.categoria;
+      detallesInput.value = p.detalles;
+      descripcionInput.value = p.descripcion;
+      editIndex = index;
+    }
+
+    window.eliminarProducto = function (index) {
+      productos.splice(index, 1);
+      guardarProductos();
+      mostrarProductos();
+    }
+  </script>
+</body>
+</html>
